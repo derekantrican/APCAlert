@@ -11,12 +11,14 @@ const double BATTERY_STATUS_CHECK_FREQUENCY = 0;
 
 if (args[0] == "onbattery")
 {
-    var stats = GetAPCStats(new()
+    var onbatteryStats = new Dictionary<string, Func<string, (string, string)>>
     {
         { "TONBATT", val => ("Time on battery", val) },
         { "TIMELEFT", val => ("Battery time remaining", val) },
         { "BCHARGE", val => ("Battery percentage", $"{Regex.Match(val, @"\d+").Value}%") },
-    });
+    };
+
+    var stats = GetAPCStats(onbatteryStats);
 
     await SendDiscordMessage(DISCORD_WEBHOOK_URL,
         "Main power disconnected",
@@ -26,17 +28,13 @@ if (args[0] == "onbattery")
 
     if (BATTERY_STATUS_CHECK_FREQUENCY > 0)
     {
+        onbatteryStats.Add("STATUS", val => ("STATUS", val));
+
         while (true)
         {
             Thread.Sleep(TimeSpan.FromMinutes(BATTERY_STATUS_CHECK_FREQUENCY));
-
-            stats = GetAPCStats(new()
-            {
-                { "TONBATT", val => ("Time on battery", val) },
-                { "TIMELEFT", val => ("Battery time remaining", val) },
-                { "BCHARGE", val => ("Battery percentage", $"{Regex.Match(val, @"\d+").Value}%") },
-                { "STATUS", val => ("STATUS", val) },
-            });
+            
+            stats = GetAPCStats(onbatteryStats);
 
             if (stats["STATUS"] != "ONBATT")
             {

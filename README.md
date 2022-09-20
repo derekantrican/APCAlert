@@ -16,5 +16,4 @@ A Discord alert event for APC branded UPS battery backups.
 2. Either clone the repo with git or download as a zip
 3. Open `Program.cs` and change the values of `DISCORD_WEBHOOK_URL` and, optionally, `BATTERY_STATUS_CHECK_FREQUENCY`
 4. Open command prompt, `cd` to the location of the `.csproj` and run `dotnet build`. This should build the `.exe` and place it (along with the `onbattery.bat` and `offbattery.bat` event handlers) in the apcupsd installation directory: `C:\apcupsd\etc\apcupsd`
-5. You're all set!
-
+5. You're all set! Hopefully this never runs to alert you that the power's out 😊

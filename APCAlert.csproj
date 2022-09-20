@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <OutputPath>C:\apcupsd\etc\apcupsd</OutputPath><!--Install apcupsd from http://www.apcupsd.org-->
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <Target Name="MyAfterBuild" AfterTargets="Build">
+    <WriteLinesToFile
+      File="$(OutputPath)\onbattery.bat"
+      Lines="APCAlert.exe onbattery"
+      Overwrite="true"
+      Encoding="ASCII"/>
+    <WriteLinesToFile
+      File="$(OutputPath)\offbattery.bat"
+      Lines="APCAlert.exe offbattery"
+      Overwrite="true"
+      Encoding="ASCII"/>
+  </Target>
+</Project>

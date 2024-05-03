@@ -9,7 +9,7 @@ const string DISCORD_WEBHOOK_URL = "";
 //(eg setting to a value of 5 means "alert me of the battery state every 5 minutes while on battery power")
 const double BATTERY_STATUS_CHECK_FREQUENCY = 0;
 
-if (args[0] == "onbattery")
+if (args.Length > 0 && args[0] == "onbattery")
 {
     var onbatteryStats = new Dictionary<string, Func<string, (string, string)>>
     {
@@ -51,7 +51,7 @@ if (args[0] == "onbattery")
         }
     }
 }
-else
+else if (args.Length > 0 && args[0] == "offbattery")
 {
     var stats = GetAPCStats(new()
     {
@@ -66,6 +66,10 @@ else
     {
         { "Amount of time on battery power", lastDurationOnBatt.ToString() },
     });
+}
+else
+{
+    Console.WriteLine("Unrecognized arg. If you are calling APCAlert manually for testing, try running `APCAlert onbattery` or `APCAlert offbattery`");
 }
 
 async Task<string> SendDiscordMessage(string webhookUrl, string message, string description, int color, Dictionary<string, string> fields = null)
